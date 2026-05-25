@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Pattern log -->
+    <property name="LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n"/>
+
+    <!-- ========================= -->
+    <!-- PROFILE DEV -->
+    <!-- ========================= -->
+    <springProfile name="dev">
+
+        <!-- Console Appender -->
+        <appender name="CONSOLE"
+                  class="ch.qos.logback.core.ConsoleAppender">
+
+            <encoder>
+                <pattern>${LOG_PATTERN}</pattern>
+            </encoder>
+        </appender>
+
+        <!-- DEBUG level -->
+        <root level="DEBUG">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+
+    </springProfile>
+
+    <!-- ========================= -->
+    <!-- PROFILE PROD -->
+    <!-- ========================= -->
+    <springProfile name="prod">
+
+        <!-- Rolling File Appender -->
+        <appender name="FILE"
+                  class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+            <!-- File hiện tại -->
+            <file>logs/application.log</file>
+
+            <!-- Rolling strategy -->
+            <rollingPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+
+                <!-- Tên file sau khi rotate -->
+                <fileNamePattern>
+                    logs/application.%d{yyyy-MM-dd}.%i.log
+                </fileNamePattern>
+
+                <!-- Giới hạn 100MB -->
+                <maxFileSize>100MB</maxFileSize>
+
+                <!-- Tổng dung lượng -->
+                <totalSizeCap>2GB</totalSizeCap>
+
+                <!-- Giữ 30 ngày -->
+                <maxHistory>30</maxHistory>
+
+            </rollingPolicy>
+
+            <encoder>
+                <pattern>${LOG_PATTERN}</pattern>
+            </encoder>
+
+        </appender>
+
+        <!-- INFO level -->
+        <root level="INFO">
+            <appender-ref ref="FILE"/>
+        </root>
+
+    </springProfile>
+
+</configuration>
